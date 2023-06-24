@@ -1,8 +1,8 @@
-package cl.usach.tingeso.acopioservice.Services;
+package cl.usach.tingeso.acopioservice.services;
 
 import cl.usach.tingeso.acopioservice.AcopioServiceApplication;
-import cl.usach.tingeso.acopioservice.Entities.AcopioEntity;
-import cl.usach.tingeso.acopioservice.Repositories.AcopioRepository;
+import cl.usach.tingeso.acopioservice.entities.AcopioEntity;
+import cl.usach.tingeso.acopioservice.repositories.AcopioRepository;
 import lombok.Generated;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -34,6 +35,9 @@ public class AcopioService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Value("${proveedor.service.base.url}")
+    private String proveedorServiceBaseUrl;
 
     public List<AcopioEntity> findAll() {
         return acopioRepository.findAll();
@@ -78,10 +82,9 @@ public class AcopioService {
                     String proveedorCodigo = proveedorCell.getStringCellValue();
                     Integer kilos = (int) kilosCell.getNumericCellValue();
                     //Aqui se valida que existe un proveedor con el codigo ingresado
-                    String url = "http://localhost:8083/proveedor/exist/" + proveedorCodigo;
+                    String url = proveedorServiceBaseUrl+"exist/" + proveedorCodigo;
                     ResponseEntity<Boolean> response = restTemplate.getForEntity(url, Boolean.class);
                     boolean exists = Boolean.TRUE.equals(response.getBody());
-
                     if (exists) {
                         String id = UUID.randomUUID().toString();
                         if (acopioRepository.findById(id).isPresent()) {

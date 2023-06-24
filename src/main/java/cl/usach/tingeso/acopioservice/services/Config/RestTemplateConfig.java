@@ -1,4 +1,4 @@
-package cl.usach.tingeso.acopioservice.Services.Config;
+package cl.usach.tingeso.acopioservice.services.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

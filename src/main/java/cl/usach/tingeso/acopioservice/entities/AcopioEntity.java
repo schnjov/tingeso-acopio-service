@@ -1,4 +1,4 @@
-package cl.usach.tingeso.acopioservice.Entities;
+package cl.usach.tingeso.acopioservice.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
