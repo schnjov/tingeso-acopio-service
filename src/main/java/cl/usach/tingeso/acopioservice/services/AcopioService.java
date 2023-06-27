@@ -17,10 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Service
@@ -98,6 +95,51 @@ public class AcopioService {
             counter++;
         }
         return acopios;
+    }
+
+    public List<AcopioEntity> findByProveedor(Date date, String codigo_proveedor) {
+        List<AcopioEntity> acopios;
+        if (date == null)
+            acopios = acopioRepository.findByCodigoProveedor(codigo_proveedor);
+        else
+            acopios = acopioRepository.findAcopioEntitiesByCodigoProveedorAndFechaGreaterThanEqual(codigo_proveedor,date);
+        return acopios;
+    }
+
+    public Integer getAcopioTotal(Date date, String codigo_proveedor) {
+        List<AcopioEntity> acopios = findByProveedor(date ,codigo_proveedor);
+        Integer total = 0;
+        for (AcopioEntity acopio : acopios) {
+            total += acopio.getKilos();
+        }
+        return total;
+    }
+
+    public List<Integer> getAcopiosFromDateByCodigoProveedor(Date date, String codigo_proveedor) {
+        logger.info("Date: "+date);
+        List<AcopioEntity> acopios = findByProveedor(date, codigo_proveedor);
+        List<Integer> dias = new ArrayList<>(3);
+        Set<Date> unique = new HashSet<>();
+        //Iniciar en 0 los días
+        for (int i = 0; i < 3; i++) {
+            dias.add(0);
+        }
+        for (AcopioEntity acopio : acopios) {
+            if(unique.contains(acopio.getFecha()))
+                continue;
+            List<AcopioEntity> acopiosByDate = acopioRepository.findByFecha(acopio.getFecha());
+            if (acopiosByDate.size() == 2) {
+                dias.set(0, dias.get(0) + 1);
+            }else {
+                if (acopio.getTurno() == 1) {
+                    dias.set(1, dias.get(1) + 1);
+                } else {
+                    dias.set(2, dias.get(2) + 1);
+                }
+            }
+            unique.add(acopio.getFecha());
+        }
+        return dias;
     }
 
 }

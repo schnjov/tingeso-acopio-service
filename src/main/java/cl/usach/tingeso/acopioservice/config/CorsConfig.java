@@ -1,4 +1,4 @@
-package cl.usach.tingeso.acopioservice.services.Config;
+package cl.usach.tingeso.acopioservice.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

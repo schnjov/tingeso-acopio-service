@@ -17,7 +17,8 @@ public class AcopioEntity {
     @JsonFormat(pattern="dd-MM-yyyy")
     private Date fecha;
     private Integer turno;
-    private String codigo_proveedor;
+    @Column(name="codigo_proveedor")
+    private String codigoProveedor;
     private Integer kilos;
 
     public String getId() {
@@ -44,12 +45,12 @@ public class AcopioEntity {
         this.turno = turno;
     }
 
-    public String getCodigo_proveedor() {
-        return codigo_proveedor;
+    public String getCodigoProveedor() {
+        return codigoProveedor;
     }
 
-    public void setCodigo_proveedor(String codigo_proveedor) {
-        this.codigo_proveedor = codigo_proveedor;
+    public void setCodigoProveedor(String codigo_proveedor) {
+        this.codigoProveedor = codigo_proveedor;
     }
 
     public Integer getKilos() {
